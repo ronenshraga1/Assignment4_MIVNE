@@ -4,5 +4,10 @@ public class TestHashTables {
         for(double elem:avg1){
             System.out.println(elem);
         }
+        double[] avg2 =HashingExperimentUtils.measureInsertionsChaining();
+        for(double elem:avg2){
+            System.out.println(elem);
+        }
+
     }
 }

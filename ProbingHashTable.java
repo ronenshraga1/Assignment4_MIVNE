@@ -36,7 +36,7 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
             if (e == null) {
                 return null;
             }
-            if (e.key().equals(key)) {
+            if (e.key() != null && e.key().equals(key)) {
                 return e.satelliteData();
             }
             index = (index + 1) % capacity;
@@ -51,6 +51,7 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
                 table[j] = new Element<K, V>(key, value);
                 size++;
                 rehash();
+                break;
             }
             j = (j + 1) % capacity;
         }
@@ -68,14 +69,27 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
             capacity = capacity * 2;
             Element<K,V>[] tempTable = table;
             table = new Element[capacity];
+            size = 0;
             for(Element<K,V> element: tempTable){
-                insert(element.key(), element.satelliteData());
+                if(element.key() != null) {
+                    insert(element.key(), element.satelliteData());
+                }
             }
         }
     }
 
     public boolean delete(K key) {
-        throw new UnsupportedOperationException("Delete this line and replace it with your implementation");
+        int j = hashFunc.hash(key);
+        for(int i =0;i<capacity;i++){
+            if( table[j] != null && table[j].key() != null &&table[j].key().equals(key)) {
+                Element<K,V> element = new Element<>(null);
+                table[j] = element;
+                size--;
+                return true;
+            }
+            j = (j + 1) % capacity;
+        }
+        return false;
     }
 
     public HashFunctor<K> getHashFunc() {

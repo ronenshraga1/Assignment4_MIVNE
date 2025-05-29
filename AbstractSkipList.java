@@ -78,8 +78,6 @@ abstract public class AbstractSkipList {
         for ( level = 0; level <= skipListNode.height(); ++level) {
             previous = skipListNode.getPrev(level);
             next = skipListNode.getNext(level);
-
-
             previous.setNext(level, next);
             previous.setSpace(level, previous.getSpace(level) + skipListNode.getSpace(level) - 1);
             next.setPrev(level, previous);

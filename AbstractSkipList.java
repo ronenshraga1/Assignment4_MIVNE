@@ -32,38 +32,34 @@ abstract public class AbstractSkipList {
     }
 
     public SkipListNode insert(int key) {
-        int nodeHeight = generateHeight();
-
-        while (nodeHeight > head.height()) {
-            increaseHeight();
-        }
-
-        SkipListNode prevNode = find(key);
-        if (prevNode.key() == key) {
-            return null;
-        }
-
-        SkipListNode newNode = new SkipListNode(key);
+        int nodeheight = generateHeight();
         int space = 1;
         int level;
-        for (level = 0; level <= nodeHeight && prevNode != null; ++level) {
-            SkipListNode nextNode = prevNode.getNext(level);
-            newNode.addLevel(nextNode, prevNode,prevNode.getSpace(level) - space + 1);
-            prevNode.setNext(level, newNode);
-            prevNode.setSpace(level,space);
+        while (nodeheight > head.height()) {
+            increaseHeight();
+        }
+        SkipListNode previousNode = find(key);
+        if (previousNode.key() == key) {
+            return null;
+        }
+        SkipListNode newNode = new SkipListNode(key);
+        for (level = 0; level <= nodeheight && previousNode != null; ++level) {
+            SkipListNode nextNode = previousNode.getNext(level);
+            newNode.addLevel(nextNode, previousNode, previousNode.getSpace(level) - space + 1);
+            previousNode.setNext(level, newNode);
+            previousNode.setSpace(level,space);
             nextNode.setPrev(level, newNode);
-
-            while (prevNode != head && prevNode.height() == level) {
-                prevNode = prevNode.getPrev(level);
-                space = space + prevNode.getSpace(level);
+            while (previousNode != head && previousNode.height() == level) {
+                previousNode = previousNode.getPrev(level);
+                space = space + previousNode.getSpace(level);
             }
         }
-        while (prevNode != null) {
-            for (int i = level; i <= prevNode.height(); ++i) {
-                prevNode.setSpace(i, prevNode.getSpace(i) + 1);
+        while (previousNode != null) {
+            for (int j = level; j <= previousNode.height(); ++j) {
+                previousNode.setSpace(j, previousNode.getSpace(j) + 1);
             }
-            level = prevNode.height() + 1;
-            prevNode = prevNode.getPrev(prevNode.height());
+            level = previousNode.height() + 1;
+            previousNode = previousNode.getPrev(previousNode.height());
         }
         size = size + 1;
         return newNode;

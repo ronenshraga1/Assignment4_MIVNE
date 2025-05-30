@@ -17,12 +17,12 @@ public class MyDataStructure {
     public MyDataStructure(int N) {
         skiplist = new IndexableSkipList(0.5);
         int base =N;
-        int pow = 1;
+        int power = 1;
         while (base != 1){
             base = base / 2;
-            pow++;
+            power++;
         }
-        table = new ProbingHashTable<>(new ModularHash(), pow, 0.75);
+        table = new ProbingHashTable<>(new ModularHash(), power, 0.75);
     }
     /*
      * In the following functions,
@@ -82,7 +82,7 @@ public class MyDataStructure {
      */
     public int rank(int value) {
         int rank = skiplist.rank(value);
-        return rank -1;
+        return rank;
     }
     /***
      * return the value key in the skip list select function

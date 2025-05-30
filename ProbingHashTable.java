@@ -71,7 +71,7 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
             table = new Element[capacity];
             size = 0;
             for(Element<K,V> element: tempTable){
-                if(element.key() != null) {
+                if(element != null && element.key() != null) {
                     insert(element.key(), element.satelliteData());
                 }
             }
@@ -80,10 +80,13 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
 
     public boolean delete(K key) {
         int j = hashFunc.hash(key);
-        for(int i =0;i<capacity;i++){
-            if( table[j] != null && table[j].key() != null &&table[j].key().equals(key)) {
-                Element<K,V> element = new Element<>(null);
-                table[j] = element;
+        for (int i = 0; i < capacity; i++) {
+            Element<K, V> e = table[j];
+            if (e == null) {
+                return false;
+            }
+            if (e.key() != null && e.key().equals(key)) {
+                e.setKey(null);
                 size--;
                 return true;
             }

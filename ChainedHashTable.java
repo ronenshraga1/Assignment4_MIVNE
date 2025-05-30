@@ -31,6 +31,9 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
     public V search(K key) {
         int index = hashFunc.hash(key);
         List<Element<K,V>> list = table[index];
+        if(list == null){
+            return null;
+        }
         V value = null;
         for(Element<K,V> elem:list){
             if(elem.key().equals(key)){
@@ -52,7 +55,6 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         table[index] = list;
         size++;
         rehash();
-
     }
     private void rehash(){
         if((double)size / capacity > maxLoadFactor){
